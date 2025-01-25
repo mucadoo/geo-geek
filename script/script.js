@@ -192,7 +192,7 @@ function showMap() {
     var map = AmCharts.makeChart("map_container", {
         type: "map",
         "theme": "none",
-        pathToImages: "script/libraries/ammap/images/",
+        pathToImages: "script/libs/ammap/images/",
         areasSettings: {
             autoZoom: true,
             rollOverOutlineColor: "#000"
@@ -224,7 +224,7 @@ function showMap() {
 $(document).ready(function () {
 
     // Load the JSON data once when the page loads
-    $.getJSON('script/countries.json', function(data) {
+    $.getJSON('script/libs/countries.min.json', function(data) {
         countries_info = TAFFY(data);
     });
 
