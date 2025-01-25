@@ -3,7 +3,7 @@ function loadPage(page) {
         $('.navbar a').removeClass('selected');
         $('.navbar a[href="#!' + page + '"]').addClass('selected');
     }
-    if (page == "map_explorer" && countries_info({id: sessionStorage.country}).first()) {
+    if (page == "map_explorer" && sessionStorage.country && countries_info({ISO_code: sessionStorage.country}).first()) {
         showCountryInfo(sessionStorage.country, sessionStorage.country_name);
     } else if (page == "rankings" && rankings({ranking: sessionStorage.rank}).first()) {
         loadRanking(sessionStorage.rank);
@@ -16,38 +16,46 @@ function loadPage(page) {
         }
     }
 }
+
 function showCountryInfo(country, title) {
     sessionStorage.country = country;
     sessionStorage.country_name = title;
-    var tgt_country = countries_info({id: country}).first();
 
-    $('#country_info_page #country_flag').attr("src", "media/flags/" + tgt_country.id + ".png");
-    $('#country_info_page #country_map').attr("src", "media/maps/" + tgt_country.id + ".png");
-    $('#country_info_page h2.country_name').text(title);
-    $('#country_info_page #capital').text(tgt_country.capital);
-    $('#country_info_page #largest_city').text(tgt_country.largest_city);
-    $('#country_info_page #languages').text(tgt_country.languages);
-    $('#country_info_page #demonym').text(tgt_country.demonym);
-    $('#country_info_page #government').text(tgt_country.government);
-    $('#country_info_page #area').text(tgt_country.area);
-    $('#country_info_page #population').text(tgt_country.population);
-    $('#country_info_page #gdp').text(tgt_country.gdp);
-    $('#country_info_page #hdi').text(tgt_country.hdi);
-    $('#country_info_page #currency').text(tgt_country.currency);
-    $('#country_info_page #time_zone').text(tgt_country.time_zone);
-    $('#country_info_page #call_code').text(tgt_country.call_code);
-    $('#country_info_page #iso_code').text(tgt_country.id);
-    $('#country_info_page #tld').text(tgt_country.tld);
+    // Find the country info from the preloaded data using TaffyDB
+    var tgt_country = countries_info({ISO_code: country}).first();
 
-    if ($('section').hasClass('active')) {
-        $('section.active').fadeOut("slow", function () {
+    if (tgt_country) {
+        $('#country_info_page #country_flag').attr("src", tgt_country.flagUrl);
+        $('#country_info_page h2.country_name').text(title);
+        $('#country_info_page #description').text(tgt_country.description);
+        $('#country_info_page #capital').text(tgt_country.capital);
+        $('#country_info_page #largest_city').text(tgt_country.largest_city);
+        $('#country_info_page #languages').text(tgt_country.official_language);
+        $('#country_info_page #demonym').text(tgt_country.demonym);
+        $('#country_info_page #government').text(tgt_country.government);
+        $('#country_info_page #area').text(tgt_country.area_km2);
+        $('#country_info_page #population').text(tgt_country.population);
+        $('#country_info_page #gdp').text(tgt_country.GDP);
+        $('#country_info_page #hdi').text(tgt_country.HDI);
+        $('#country_info_page #currency').text(tgt_country.currency);
+        $('#country_info_page #time_zone').text(tgt_country.time_zone);
+        $('#country_info_page #call_code').text(tgt_country.calling_code);
+        $('#country_info_page #iso_code').text(tgt_country.ISO_code);
+        $('#country_info_page #tld').text(tgt_country.internet_TLD);
+
+        if ($('section').hasClass('active')) {
+            $('section.active').fadeOut("slow", function () {
+                loadPage("country_info");
+            });
+            $('section').removeClass("active");
+        } else {
             loadPage("country_info");
-        });
-        $('section').removeClass("active");
+        }
     } else {
-        loadPage("country_info");
+        console.log('Country not found: ' + country);
     }
 }
+
 function loadRanking(name) {
     sessionStorage.rank = name;
     var tgt_rank = rankings({ranking: name}).first();
@@ -72,6 +80,7 @@ function loadRanking(name) {
         loadPage("inside_ranking");
     }
 }
+
 function showMap() {
     $('#map_container').remove();
     $("#map_explorer_page").append("<div id='map_container'></div>");
@@ -165,7 +174,7 @@ function showMap() {
     function handleMapObjectClick(event) {
         if (event.mapObject.id == "backButton") {
             handleGoHome();
-        } else if (countries_info({id: event.mapObject.id}).first()) {
+        } else if (countries_info({ISO_code: event.mapObject.id}).first()) {
             setTimeout(function () {
                 showCountryInfo(event.mapObject.id, event.mapObject.title);
             }, 1000);
@@ -175,7 +184,14 @@ function showMap() {
     map.addListener("homeButtonClicked", handleGoHome);
     map.addListener("clickMapObject", handleMapObjectClick);
 }
+
 $(document).ready(function () {
+
+    // Load the JSON data once when the page loads
+    $.getJSON('script/countries.json', function(data) {
+        countries_info = TAFFY(data);
+    });
+
     var index_link = window.location.href.indexOf("#!");
     $('a[href^="#!"]').click(function () {
         var page_to_load = $(this).attr('href').substring(2);
