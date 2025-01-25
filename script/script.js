@@ -30,7 +30,7 @@ function showCountryInfo(country, title) {
         $('#country_info_page #description').text(tgt_country.description);
         $('#country_info_page #capital').text(tgt_country.capital);
         $('#country_info_page #largest_city').text(tgt_country.largest_city);
-        $('#country_info_page #languages').text(tgt_country.official_language);
+        $('#country_info_page #language').text(tgt_country.official_language);
         $('#country_info_page #demonym').text(tgt_country.demonym);
         $('#country_info_page #government').text(tgt_country.government);
         $('#country_info_page #area').text(tgt_country.area_km2);
