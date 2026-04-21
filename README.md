@@ -2,6 +2,10 @@
 
 GeoGeek is an interactive web application designed to help users learn about world geography in an engaging way. It provides a platform to explore political territories, discover country details, and view geographical rankings.
 
+## 🚀 Live Demo
+
+This site is deployed to GitHub Pages and can be accessed at: [https://mucadoo.github.io/geo-geek/](https://mucadoo.github.io/geo-geek/)
+
 ## 🌍 Features
 
 - **Map Explorer:** Interactive world map to explore different continents and countries.
@@ -47,7 +51,7 @@ Since GeoGeek is a static web application, you can run it locally without any co
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/geo-geek.git
+   git clone https://github.com/mucadoo/geo-geek.git
    ```
 2. **Navigate to the project directory:**
    ```bash
