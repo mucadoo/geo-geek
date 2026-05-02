@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 
 export default async function CountryInfo({ params }: { params: { id: string } }) {
   const { id } = await params;
-  const country = countryService.getCountryByIso(id);
+  const country = await countryService.getCountryByIso(id);
 
   if (!country) {
     notFound();

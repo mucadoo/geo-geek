@@ -1,18 +1,33 @@
-import countriesData from '@/data/countries.json';
 import { Country, RankingType } from '@/types';
 
-const countries = countriesData as Country[];
+let cachedCountries: Country[] | null = null;
+
+async function fetchCountries(): Promise<Country[]> {
+  if (cachedCountries) return cachedCountries;
+
+  const url = process.env.NEXT_PUBLIC_COUNTRIES_JSON_URL || 'https://mucadoo.github.io/country-info-scraper/countries.min.json';
+  const response = await fetch(url);
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch country data');
+  }
+
+  cachedCountries = await response.json();
+  return cachedCountries!;
+}
 
 export const countryService = {
-  getAllCountries: (): Country[] => {
-    return countries;
+  getAllCountries: async (): Promise<Country[]> => {
+    return await fetchCountries();
   },
 
-  getCountryByIso: (isoCode: string): Country | undefined => {
+  getCountryByIso: async (isoCode: string): Promise<Country | undefined> => {
+    const countries = await fetchCountries();
     return countries.find(c => c.ISO_code.toUpperCase() === isoCode.toUpperCase());
   },
 
-  getRankings: (type: RankingType): { country: string; value: string | number; isoCode: string }[] => {
+  getRankings: async (type: RankingType): Promise<{ country: string; value: string | number; isoCode: string }[]> => {
+    const countries = await fetchCountries();
     let sorted = [...countries];
     let prop: keyof Country;
     let desc = true;

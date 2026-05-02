@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default async function RankingDetail({ params }: { params: { id: string } }) {
   const { id } = await params;
   const decodedId = decodeURIComponent(id) as RankingType;
-  const rankings = countryService.getRankings(decodedId);
+  const rankings = await countryService.getRankings(decodedId);
 
   let valueLabel = 'Value';
   if (decodedId.includes('populous')) valueLabel = 'Population';
