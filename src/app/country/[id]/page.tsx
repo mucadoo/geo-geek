@@ -2,8 +2,14 @@ import Header from '@/components/Header';
 import { countryService } from '@/lib/countryService';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
+
+export async function generateStaticParams() {
+  const countries = await countryService.getAllCountries();
+  return countries.map((country) => ({
+    id: country.ISO_code,
+  }));
+}
 
 export default async function CountryInfo({ params }: { params: { id: string } }) {
   const { id } = await params;

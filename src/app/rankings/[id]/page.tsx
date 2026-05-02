@@ -4,6 +4,20 @@ import { RankingType } from '@/types';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
+export function generateStaticParams() {
+  const rankingCategories = [
+    'Most populous countries',
+    'Less populous countries',
+    'Larger countries',
+    'Smaller countries',
+    'Most populated countries',
+    'Less populated countries',
+  ];
+  return rankingCategories.map((category) => ({
+    id: encodeURIComponent(category),
+  }));
+}
+
 export default async function RankingDetail({ params }: { params: { id: string } }) {
   const { id } = await params;
   const decodedId = decodeURIComponent(id) as RankingType;
@@ -45,7 +59,7 @@ export default async function RankingDetail({ params }: { params: { id: string }
                   </Link>
                 </td>
                 <td className="bg-white border border-geogeek-green-light p-[10px] text-[1.2em] font-raleway font-light text-center">
-                  {item.value.toLocaleString()}
+                  {item.value ? item.value.toLocaleString() : 'N/A'}
                 </td>
               </tr>
             ))}
