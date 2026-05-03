@@ -61,11 +61,11 @@ export default function Map() {
               <Geography
                 key={geo.rsmKey}
                 geography={geo}
-                fill={CONTINENT_COLORS[geo.properties.name] || '#CCCCCC'}
+                fill={CONTINENT_COLORS[geo.name] || '#CCCCCC'}
                 stroke="#FFF"
                 strokeWidth={1}
                 onMouseEnter={(e) => { e.currentTarget.style.fill = '#9a7bca'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.fill = CONTINENT_COLORS[geo.properties.name] || '#CCCCCC'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.fill = CONTINENT_COLORS[geo.name] || '#CCCCCC'; }}
                 onClick={() => setView('world')}
                 style={{ default: { outline: 'none' }, hover: { outline: 'none', cursor: 'pointer' }, pressed: { outline: 'none' } }}
               />
