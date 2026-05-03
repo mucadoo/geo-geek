@@ -62,9 +62,16 @@ export default function Map() {
           {selectedContinent && (
             <button
               onClick={resetMap}
-              className="absolute bottom-10 left-1/2 transform -translate-x-1/2 btn-accent flex items-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-xl"
+              title="Return to World"
+              className="absolute top-6 left-6 animate-in fade-in slide-in-from-left-4 duration-500 shadow-xl p-2 bg-white rounded-full hover:scale-105 transition-all group cursor-pointer"
             >
-              ← Return to World
+              <img 
+                src="/media/back_icon.svg" 
+                alt="Return to World" 
+                width={32} 
+                height={32} 
+                className="group-hover:invert-[0.3] sepia-[1] hue-rotate-[180deg] saturate-[3] transition-all"
+              />
             </button>
           )}
         </React.Fragment>
