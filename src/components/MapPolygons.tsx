@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import NProgress from 'nprogress';
 import { Geographies, Geography } from '@vnedyalk0v/react19-simple-maps';
 import { useMapStore } from '@/store/useMapStore';
 import { NUMERIC_TO_CONTINENT, NUMERIC_TO_ALPHA2, CONTINENT_VIEWS } from '@/config/mapConstants';
@@ -70,7 +71,10 @@ export default function MapPolygons({ mapData }: MapPolygonsProps) {
               if (!isClickable) return;
               
               if (selectedContinent) {
-                if (alpha2) router.push(`/country/${alpha2}`);
+                if (alpha2) {
+                  NProgress.start();
+                  router.push(`/country/${alpha2}`);
+                }
               } else {
                 const view = CONTINENT_VIEWS[continent as keyof typeof CONTINENT_VIEWS];
                 if (view) {
