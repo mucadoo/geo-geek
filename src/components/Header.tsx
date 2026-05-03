@@ -15,7 +15,6 @@ const navItems =[
   { href: '/', label: 'HOME', icon: Home },
   { href: '/map', label: 'EXPLORER', icon: Globe },
   { href: '/rankings', label: 'RANKINGS', icon: BarChart3 },
-  { href: '/contact', label: 'CONTACT', icon: Mail },
 ];
 
 export default function Header() {
