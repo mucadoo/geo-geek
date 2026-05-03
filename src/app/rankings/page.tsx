@@ -20,7 +20,7 @@ export default function Rankings() {
           {rankingCategories.map((category) => (
             <Link 
               key={category}
-              href={`/rankings/${encodeURIComponent(category)}`}
+              href={`/rankings/${category}`}
               className="bg-white rounded-2xl h-[140px] flex items-center justify-center text-center px-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:shadow-[0_8px_30px_rgba(0,168,181,0.1)] hover:border-primary/20 transition-all duration-300 group"
             >
               <h3 className="font-medium text-[16px] text-gray-700 group-hover:text-primary transition-colors">

@@ -17,13 +17,16 @@ export function generateStaticParams() {
     'Lowest HDI',
   ];
   return rankingCategories.map((category) => ({
-    id: encodeURIComponent(category),
+    id: encodeURIComponent(category), // Encode so Next.js handles it properly in static export
   }));
 }
 
 export default async function RankingDetail({ params }: { params: { id: string } }) {
   const { id } = await params;
-  const decodedId = decodeURIComponent(id) as RankingType;
+  
+  // Safely decode in case of double encoding (e.g. Larger%2520countries -> Larger%20countries -> Larger countries)
+  const decodedId = decodeURIComponent(id).replace(/%20/g, ' ') as RankingType;
+  
   const rankings = await countryService.getRankings(decodedId);
 
   let valueLabel = 'Value';
@@ -44,13 +47,14 @@ export default async function RankingDetail({ params }: { params: { id: string }
           <h1 className="text-[32px] font-medium text-[#2c3e50] tracking-tight">{decodedId}</h1>
         </div>
 
-        <div className="max-w-[800px] mx-auto">
+        {/* Re-added the white background padding box here so it matches the beautiful UI */}
+        <div className="max-w-[800px] mx-auto bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="text-center w-20">Rank</TableHead>
-                <TableHead>Country</TableHead>
-                <TableHead className="text-right">{valueLabel}</TableHead>
+                <TableHead className="pl-4">Country</TableHead>
+                <TableHead className="text-right pr-4">{valueLabel}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -59,12 +63,12 @@ export default async function RankingDetail({ params }: { params: { id: string }
                   <TableCell className="text-center font-semibold text-gray-400">
                     {index + 1}
                   </TableCell>
-                  <TableCell>
-                    <Link href={`/country/${item.isoCode}`} className="font-medium text-[#2c3e50] hover:text-primary transition-colors">
+                  <TableCell className="pl-4">
+                    <Link href={`/country/${item.isoCode}`} className="font-medium text-[#2c3e50] hover:text-primary transition-colors text-[16px]">
                       {item.country}
                     </Link>
                   </TableCell>
-                  <TableCell className="text-right font-light text-gray-500">
+                  <TableCell className="text-right font-light text-gray-500 pr-4">
                     {item.value ? item.value.toLocaleString() : 'N/A'}
                   </TableCell>
                 </TableRow>

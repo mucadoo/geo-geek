@@ -22,12 +22,19 @@
 
 body {
   background-color: var(--background);
-  /* Sleek dotted pattern */
   background-image: radial-gradient(#d3dbd6 1.5px, transparent 1.5px) !important;
   background-size: 20px 20px !important;
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
   overflow-x: hidden;
+}
+
+/* Force remove the black accessibility box when clicking paths */
+path {
+  outline: none !important;
+}
+path:focus {
+  outline: none !important;
 }
 
 .container-custom {
@@ -43,8 +50,5 @@ body {
   }
   .btn-accent {
     @apply bg-accent text-[#2c3e50] px-8 py-3 rounded-full font-medium tracking-wide text-sm hover:bg-[#e6b83b] transition-all shadow-md hover:shadow-lg active:scale-95;
-  }
-  .pill-input {
-    @apply w-full bg-white border border-gray-200 rounded-full h-[50px] px-6 transition-all duration-300 text-[15px] outline-none text-gray-700 shadow-sm focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-gray-300;
   }
 }
