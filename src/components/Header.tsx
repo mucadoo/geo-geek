@@ -46,10 +46,10 @@ export default function Header() {
                     "flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[13px] tracking-widest uppercase transition-all duration-300",
                     isActive 
                       ? "bg-white text-[#2c3e50] shadow-sm border border-gray-100" 
-                      : "text-gray-500 hover:text-primary hover:bg-white/50"
+                      : "text-[#2c3e50]/75 hover:text-primary hover:bg-white/50"
                   )}
                 >
-                  <Icon size={15} className={isActive ? "text-primary" : "text-gray-400"} />
+                  <Icon size={15} className={isActive ? "text-primary" : "text-[#2c3e50]/50"} />
                   {item.label}
                 </Link>
               </li>

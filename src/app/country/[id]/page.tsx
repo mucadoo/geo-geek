@@ -40,64 +40,59 @@ export default async function CountryInfo({ params }: { params: { id: string } }
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="container-custom flex-grow animate-in fade-in duration-1000 mt-4 mb-20 relative z-10">
+      <main className="container-custom flex-grow animate-in fade-in duration-1000 mt-8 mb-20 px-4">
         
-        {/* Title & Back Button */}
-        <div className="relative w-full text-center mb-16">
-          <Link href="/map" className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors p-2">
+        {/* Top Section (Hero) */}
+        <div className="flex items-center gap-6 mb-12">
+          <Link href="/map" className="text-gray-500 hover:text-primary transition-colors p-2">
             <ArrowLeft size={24} strokeWidth={1.5} />
           </Link>
-          <h1 className="text-[36px] font-medium text-[#2c3e50] tracking-tight">{country.name}</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-[40px] font-medium text-[#2c3e50] tracking-tight">{country.name}</h1>
+            <Image 
+              src={country.flagUrl} 
+              alt={`${country.name} flag`}
+              width={64}
+              height={40}
+              className="w-16 h-10 object-cover rounded shadow-sm"
+            />
+          </div>
         </div>
 
-        {/* 3-Column Layout perfectly matching the Congo screenshot */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 px-4">
+        {/* Bottom Section (Grid) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
-          {/* Column 1: Summary */}
-          <section className="flex flex-col">
-            <h2 className="text-center font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-8">
+          {/* Left Content (Summary) */}
+          <section className="lg:col-span-8">
+            <h2 className="font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-6">
               Summary
             </h2>
-            <p className="text-justify text-[14px] leading-[1.8] text-gray-600 font-light">
+            <p className="text-[15px] leading-[1.8] text-gray-600 font-light text-justify">
               {country.description}
             </p>
           </section>
 
-          {/* Column 2: Flag */}
-          <section className="flex flex-col items-center">
-            <h2 className="text-center font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-8">
-              Flag
-            </h2>
-            <div className="flex-grow flex items-start justify-center pt-4">
-              <Image 
-                src={country.flagUrl} 
-                alt={`${country.name} flag`}
-                width={280}
-                height={200}
-                className="max-w-[280px] w-full object-contain rounded-[8px] shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
-              />
-            </div>
-          </section>
-
-          {/* Column 3: Information Table */}
-          <section className="flex flex-col">
-            <h2 className="text-center font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-8">
+          {/* Right Content (Information Table) */}
+          <section className="lg:col-span-4">
+            <h2 className="font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-6">
               Information
             </h2>
-            <Table>
-              <TableBody>
-                {infoRows.map((row) => (
-                  <TableRow key={row.label}>
-                    <TableCell className="py-3 font-semibold text-[11px] text-[#2c3e50] uppercase tracking-widest whitespace-nowrap">
-                      {row.label}
-                    </TableCell>
-                    <TableCell className="py-3 text-[13px] text-gray-500 font-light text-right pl-4">
-                      {row.value || 'N/A'}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+              <Table>
+                <TableBody>
+                  {infoRows.map((row) => (
+                    <TableRow key={row.label} className="border-none">
+                      <TableCell className="py-2.5 font-semibold text-[11px] text-[#2c3e50] uppercase tracking-widest whitespace-nowrap px-0">
+                        {row.label}
+                      </TableCell>
+                      <TableCell className="py-2.5 text-[13px] text-gray-500 font-light text-right px-0">
+                        {row.value || 'N/A'}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </section>
 
         </div>
