@@ -20,8 +20,9 @@ export default function Map() {
   };
 
   return (
+    // Replaced -mt-10 with a nice white card container UI
     <div 
-      className="relative w-full h-[650px] overflow-hidden flex items-center justify-center -mt-10"
+      className="relative w-full h-[650px] overflow-hidden flex items-center justify-center bg-white rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100"
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setTooltip({ ...tooltip, show: false })}
     >
