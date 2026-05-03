@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from '@vnedyalk0v/react19-simple-maps';
-
-const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+import { useMapStore } from '@/store/useMapStore';
+import { useWorldMapData } from '@/hooks/useWorldMapData';
 
 // Numeric ISO 3166-1 → Continent
 const NUMERIC_TO_CONTINENT: Record<string, string> = {
@@ -17,7 +17,7 @@ const NUMERIC_TO_CONTINENT: Record<string, string> = {
 };
 
 const NUMERIC_TO_ALPHA2: Record<string, string> = {
-  '004': 'AF', '008': 'AL', '012': 'DZ', '020': 'AD', '024': 'AO', '028': 'AG', '031': 'AZ', '032': 'AR', '036': 'AU', '040': 'AT', '044': 'BS', '048': 'BH', '050': 'BD', '051': 'AM', '052': 'BB', '056': 'BE', '064': 'BT', '068': 'BO', '070': 'BA', '072': 'BW', '076': 'BR', '084': 'BZ', '090': 'SB', '096': 'BN', '100': 'BG', '104': 'MM', '108': 'BI', '112': 'BY', '116': 'KH', '120': 'CM', '124': 'CA', '132': 'CV', '140': 'CF', '144': 'LK', '148': 'TD', '152': 'CL', '156': 'CN', '158': 'TW', '170': 'CO', '174': 'KM', '178': 'CG', '180': 'CD', '188': 'CR', '191': 'HR', '192': 'CU', '196': 'CY', '203': 'CZ', '204': 'BJ', '208': 'DK', '212': 'DM', '214': 'DO', '218': 'EC', '222': 'SV', '231': 'ET', '232': 'ER', '233': 'EE', '238': 'FK', '242': 'FJ', '246': 'FI', '250': 'FR', '254': 'GF', '262': 'DJ', '266': 'GA', '268': 'GE', '270': 'GM', '275': 'PS', '276': 'DE', '288': 'GH', '292': 'GI', '296': 'KI', '300': 'GR', '308': 'GD', '320': 'GT', '324': 'GN', '328': 'GY', '332': 'HT', '336': 'VA', '340': 'HN', '348': 'HU', '352': 'IS', '356': 'IN', '360': 'ID', '364': 'IR', '368': 'IQ', '372': 'IE', '376': 'IL', '380': 'IT', '384': 'CI', '388': 'JM', '392': 'JP', '398': 'KZ', '400': 'JO', '404': 'KE', '408': 'KP', '410': 'KR', '414': 'KW', '417': 'KG', '418': 'LA', '422': 'LB', '426': 'LS', '428': 'LV', '430': 'LR', '434': 'LY', '438': 'LI', '440': 'LT', '442': 'LU', '450': 'MG', '454': 'MW', '458': 'MY', '462': 'MV', '466': 'ML', '470': 'MT', '478': 'MR', '480': 'MU', '484': 'MX', '492': 'MC', '496': 'MN', '498': 'MD', '499': 'ME', '504': 'MA', '508': 'MZ', '512': 'OM', '516': 'NA', '520': 'NR', '524': 'NP', '528': 'NL', '540': 'NC', '548': 'VU', '554': 'NZ', '558': 'NI', '562': 'NE', '566': 'NG', '578': 'NO', '583': 'FM', '584': 'MH', '585': 'PW', '586': 'PK', '591': 'PA', '598': 'PG', '600': 'PY', '604': 'PE', '608': 'PH', '616': 'PL', '620': 'PT', '624': 'GW', '630': 'PR', '634': 'QA', '638': 'RE', '642': 'RO', '643': 'RU', '646': 'RW', '654': 'SH', '659': 'KN', '662': 'LC', '670': 'VC', '674': 'SM', '678': 'ST', '682': 'SA', '686': 'SN', '688': 'RS', '694': 'SL', '702': 'SG', '703': 'SK', '704': 'VN', '705': 'SI', '706': 'SO', '710': 'ZA', '716': 'ZW', '724': 'ES', '728': 'SS', '736': 'SD', '740': 'SR', '748': 'SZ', '752': 'SE', '756': 'CH', '760': 'SY', '762': 'TJ', '764': 'TH', '768': 'TG', '776': 'TO', '780': 'TT', '784': 'AE', '788': 'TN', '792': 'TR', '795': 'TM', '798': 'TV', '800': 'UG', '804': 'UA', '807': 'MK', '818': 'EG', '826': 'GB', '834': 'TZ', '840': 'US', '854': 'BF', '858': 'UY', '860': 'UZ', '862': 'VE', '882': 'WS', '887': 'YE', '894': 'ZM',
+  '004': 'AF', '008': 'AL', '012': 'DZ', '020': 'AD', '024': 'AO', '028': 'AG', '031': 'AZ', '032': 'AR', '036': 'AU', '040': 'AT', '044': 'BS', '048': 'BH', '050': 'BD', '051': 'AM', '052': 'BB', '056': 'BE', '064': 'BT', '068': 'BO', '070': 'BA', '072': 'BW', '076': 'BR', '084': 'BZ', '090': 'SB', '096': 'BN', '100': 'BG', '104': 'MM', '108': 'BI', '112': 'BY', '116': 'KH', '120': 'CM', '124': 'CA', '132': 'CV', '140': 'CF', '144': 'LK', '148': 'TD', '152': 'CL', '156': 'CN', '158': 'TW', '170': 'CO', '174': 'KM', '178': 'CG', '180': 'CD', '188': 'CR', '191': 'HR', '192': 'CU', '196': 'CY', '203': 'CZ', '204': 'BJ', '208': 'DK', '212': 'DM', '214': 'DO', '218': 'EC', '222': 'SV', '231': 'ET', '232': 'ER', '233': 'EE', '238': 'FK', '242': 'FJ', '246': 'FI', '250': 'FR', '254': 'GF', '262': 'DJ', '266': 'GA', '268': 'GE', '270': 'GM', '275': 'PS', '276': 'DE', '288': 'GH', '292': 'GI', '296': 'KI', '300': 'GR', '308': 'GD', '320': 'GT', '324': 'GN', '328': 'GY', '332': 'HT', '340': 'HN', '348': 'HU', '352': 'IS', '356': 'IN', '360': 'ID', '364': 'IR', '368': 'IQ', '372': 'IE', '376': 'IL', '380': 'IT', '384': 'CI', '388': 'JM', '392': 'JP', '398': 'KZ', '400': 'JO', '404': 'KE', '408': 'KP', '410': 'KR', '414': 'KW', '417': 'KG', '418': 'LA', '422': 'LB', '426': 'LS', '428': 'LV', '430': 'LR', '434': 'LY', '438': 'LI', '440': 'LT', '442': 'LU', '450': 'MG', '454': 'MW', '458': 'MY', '462': 'MV', '466': 'ML', '470': 'MT', '478': 'MR', '480': 'MU', '484': 'MX', '492': 'MC', '496': 'MN', '498': 'MD', '499': 'ME', '504': 'MA', '508': 'MZ', '512': 'OM', '516': 'NA', '520': 'NR', '524': 'NP', '528': 'NL', '540': 'NC', '548': 'VU', '554': 'NZ', '558': 'NI', '562': 'NE', '566': 'NG', '578': 'NO', '583': 'FM', '584': 'MH', '585': 'PW', '586': 'PK', '591': 'PA', '598': 'PG', '600': 'PY', '604': 'PE', '608': 'PH', '616': 'PL', '620': 'PT', '624': 'GW', '630': 'PR', '634': 'QA', '638': 'RE', '642': 'RO', '643': 'RU', '646': 'RW', '654': 'SH', '659': 'KN', '662': 'LC', '670': 'VC', '674': 'SM', '678': 'ST', '682': 'SA', '686': 'SN', '688': 'RS', '694': 'SL', '702': 'SG', '703': 'SK', '704': 'VN', '705': 'SI', '706': 'SO', '710': 'ZA', '716': 'ZW', '724': 'ES', '728': 'SS', '736': 'SD', '740': 'SR', '748': 'SZ', '752': 'SE', '756': 'CH', '760': 'SY', '762': 'TJ', '764': 'TH', '768': 'TG', '776': 'TO', '780': 'TT', '784': 'AE', '788': 'TN', '792': 'TR', '795': 'TM', '798': 'TV', '800': 'UG', '804': 'UA', '807': 'MK', '818': 'EG', '826': 'GB', '834': 'TZ', '840': 'US', '854': 'BF', '858': 'UY', '860': 'UZ', '862': 'VE', '882': 'WS', '887': 'YE', '894': 'ZM',
 };
 
 const CONTINENT_VIEWS = {
@@ -31,119 +31,121 @@ const CONTINENT_VIEWS = {
 
 export default function Map() {
   const router = useRouter();
-  const[position, setPosition] = useState({ coordinates:[0, 20] as [number, number], zoom: 1 });
-  const [selectedContinent, setSelectedContinent] = useState<string | null>(null);
-  const [hoveredContinent, setHoveredContinent] = useState<string | null>(null);
-  const[hoveredCountry, setHoveredCountry] = useState<string | null>(null);
-  const[tooltip, setTooltip] = useState({ show: false, content: '', x: 0, y: 0 });
+  const { data: mapData, status } = useWorldMapData();
+  
+  const { 
+    position, setPosition, 
+    selectedContinent, hoveredContinent, hoveredCountry, 
+    tooltip, setTooltip,
+    setHoveredContinent, setHoveredCountry,
+    handleContinentClick, resetMap
+  } = useMapStore();
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    setTooltip(prev => ({ ...prev, x: e.clientX, y: e.clientY }));
-  };
-
-  const handleContinentClick = (name: string) => {
-    const view = CONTINENT_VIEWS[name as keyof typeof CONTINENT_VIEWS];
-    if (view) {
-      setSelectedContinent(name);
-      setPosition(view);
-      setTooltip(prev => ({ ...prev, show: false }));
-    }
-  };
-
-  const handleReset = () => {
-    setSelectedContinent(null);
-    setPosition({ coordinates: [0, 20], zoom: 1 });
+    setTooltip({ ...tooltip, x: e.clientX, y: e.clientY });
   };
 
   return (
     <div 
       className="relative w-full h-[650px] overflow-hidden flex items-center justify-center -mt-10"
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => setTooltip(prev => ({ ...prev, show: false }))}
+      onMouseLeave={() => setTooltip({ ...tooltip, show: false })}
     >
-      <div
-        className="fixed z-50 px-5 py-2.5 bg-white text-gray-800 font-semibold text-sm rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-[120%] shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-opacity duration-150 border border-gray-100 whitespace-nowrap"
-        style={{ left: tooltip.x, top: tooltip.y, opacity: tooltip.show ? 1 : 0 }}
-      >
-        {tooltip.content}
-      </div>
+      {status === 'pending' && (
+        <div className="absolute flex flex-col items-center gap-4 animate-pulse">
+          <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+          <p className="text-gray-500 font-medium">Loading World Map...</p>
+        </div>
+      )}
 
-      <ComposableMap
-        projection="geoMercator"
-        projectionConfig={{ scale: 140, center: [0, 20] }}
-        className="w-full h-full outline-none"
-      >
-        <ZoomableGroup
-          zoom={position.zoom}
-          center={position.coordinates}
-          onMoveEnd={(pos) => setPosition({ coordinates: pos.coordinates as [number, number], zoom: pos.zoom })}
-          className="transition-transform duration-1000 ease-in-out outline-none"
-        >
-          <Geographies geography={GEO_URL}>
-            {({ geographies }) => geographies.map(geo => {
-              const numericId = String(geo.id).padStart(3, '0');
-              const continent = NUMERIC_TO_CONTINENT[numericId] || 'Other';
-              const alpha2 = NUMERIC_TO_ALPHA2[numericId];
-              const countryName = geo.properties?.name || "Unknown";
+      {status === 'success' && (
+        <React.Fragment>
+          <div
+            className="fixed z-50 px-5 py-2.5 bg-white text-gray-800 font-semibold text-sm rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-[120%] shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-opacity duration-150 border border-gray-100 whitespace-nowrap"
+            style={{ left: tooltip.x, top: tooltip.y, opacity: tooltip.show ? 1 : 0 }}
+          >
+            {tooltip.content}
+          </div>
 
-              if (selectedContinent && continent !== selectedContinent) return null;
+          <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{ scale: 140, center: [0, 20] as unknown as [number, number] }}
+            className="w-full h-full outline-none"
+          >
+            <ZoomableGroup
+              zoom={position.zoom}
+              center={position.coordinates as unknown as [number, number]}
+              onMoveEnd={(pos) => setPosition({ coordinates: pos.coordinates as [number, number], zoom: pos.zoom })}
+              className="transition-transform duration-1000 ease-in-out outline-none"
+            >
+              <Geographies geography={mapData}>
+                {({ geographies }: { geographies: unknown[] }) => (geographies as { id: string | number; properties: { name: string }; rsmKey: string }[]).map((geo) => {
+                  const numericId = String(geo.id).padStart(3, '0');
+                  const continent = NUMERIC_TO_CONTINENT[numericId] || 'Other';
+                  const alpha2 = NUMERIC_TO_ALPHA2[numericId];
+                  const countryName = geo.properties?.name || "Unknown";
 
-              const isHovered = selectedContinent
-                ? hoveredCountry === geo.rsmKey
-                : hoveredContinent === continent;
+                  if (selectedContinent && continent !== selectedContinent) return null;
 
-              let fillColor = "var(--color-map-fill)"; 
-              if (isHovered && continent !== 'Other') fillColor = "var(--color-danger)";
+                  const isHovered = selectedContinent
+                    ? hoveredCountry === (geo as { rsmKey: string }).rsmKey
+                    : hoveredContinent === continent;
 
-              return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill={fillColor}
-                  stroke="var(--color-map-stroke)"
-                  strokeWidth={0.5}
-                  onMouseEnter={(e) => {
-                    if (continent === 'Other') return;
-                    if (selectedContinent) {
-                      setHoveredCountry(geo.rsmKey);
-                      setTooltip(prev => ({ ...prev, show: true, content: countryName, x: e.clientX, y: e.clientY }));
-                    } else {
-                      setHoveredContinent(continent);
-                      setTooltip(prev => ({ ...prev, show: true, content: continent, x: e.clientX, y: e.clientY }));
-                    }
-                  }}
-                  onMouseLeave={() => {
-                    if (selectedContinent) setHoveredCountry(null);
-                    else setHoveredContinent(null);
-                    setTooltip(prev => ({ ...prev, show: false }));
-                  }}
-                  onClick={() => {
-                    if (continent === 'Other') return;
-                    if (selectedContinent) {
-                      if (alpha2) router.push(`/country/${alpha2}`);
-                    } else {
-                      handleContinentClick(continent);
-                    }
-                  }}
-                  style={{
-                    default: { outline: "none", transition: "fill 0.2s ease" },
-                    hover: { outline: "none", transition: "fill 0.2s ease", cursor: continent === 'Other' ? 'default' : 'pointer' },
-                    pressed: { outline: "none" }
-                  }}
-                />
-              );
-            })}
-          </Geographies>
-        </ZoomableGroup>
-      </ComposableMap>
+                  let fillColor = "var(--color-map-fill)"; 
+                  if (isHovered && continent !== 'Other') fillColor = "var(--color-danger)";
 
-      {selectedContinent && (
-        <button
-          onClick={handleReset}
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 btn-accent flex items-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-xl"
-        >
-          ← Return to World
-        </button>
+                  return (
+                    <Geography
+                      key={(geo as { rsmKey: string }).rsmKey}
+                      geography={geo}
+                      fill={fillColor}
+                      stroke="var(--color-map-stroke)"
+                      strokeWidth={0.5}
+                      onMouseEnter={(e) => {
+                        if (continent === 'Other') return;
+                        if (selectedContinent) {
+                          setHoveredCountry((geo as { rsmKey: string }).rsmKey);
+                          setTooltip({ show: true, content: countryName, x: e.clientX, y: e.clientY });
+                        } else {
+                          setHoveredContinent(continent);
+                          setTooltip({ show: true, content: continent, x: e.clientX, y: e.clientY });
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        if (selectedContinent) setHoveredCountry(null);
+                        else setHoveredContinent(null);
+                        setTooltip({ ...tooltip, show: false });
+                      }}
+                      onClick={() => {
+                        if (continent === 'Other') return;
+                        if (selectedContinent) {
+                          if (alpha2) router.push(`/country/${alpha2}`);
+                        } else {
+                          const view = CONTINENT_VIEWS[continent as keyof typeof CONTINENT_VIEWS];
+                          if (view) handleContinentClick(continent, view);
+                        }
+                      }}
+                      style={{
+                        default: { outline: "none", transition: "fill 0.2s ease" },
+                        hover: { outline: "none", transition: "fill 0.2s ease", cursor: continent === 'Other' ? 'default' : 'pointer' },
+                        pressed: { outline: "none" }
+                      }}
+                    />
+                  );
+                })}
+              </Geographies>
+            </ZoomableGroup>
+          </ComposableMap>
+
+          {selectedContinent && (
+            <button
+              onClick={resetMap}
+              className="absolute bottom-10 left-1/2 transform -translate-x-1/2 btn-accent flex items-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-xl"
+            >
+              ← Return to World
+            </button>
+          )}
+        </React.Fragment>
       )}
     </div>
   );
