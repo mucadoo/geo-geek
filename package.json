@@ -9,12 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@amcharts/amcharts5": "^5.17.2",
-    "@amcharts/amcharts5-geodata": "^5.1.5",
     "clsx": "^2.1.1",
     "lucide-react": "^1.14.0",
     "next": "16.2.4",
-    "picomatch": "4.0.4",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "react-simple-maps": "^3.0.0",
