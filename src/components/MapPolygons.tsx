@@ -29,6 +29,8 @@ export default function MapPolygons({ mapData }: MapPolygonsProps) {
         const continent = NUMERIC_TO_CONTINENT[numericId] || 'Other';
         const alpha2 = NUMERIC_TO_ALPHA2[numericId];
         const countryName = geoData.properties?.name || "Unknown";
+        
+        const isClickable = continent !== 'Other';
 
         if (selectedContinent && continent !== selectedContinent) return null;
 
@@ -37,7 +39,7 @@ export default function MapPolygons({ mapData }: MapPolygonsProps) {
           : hoveredContinent === continent;
 
         let fillColor = "var(--color-map-fill)"; 
-        if (isHovered && continent !== 'Other') fillColor = "var(--color-danger)";
+        if (isHovered && isClickable) fillColor = "var(--color-danger)";
 
         return (
           <Geography
@@ -46,9 +48,11 @@ export default function MapPolygons({ mapData }: MapPolygonsProps) {
             fill={fillColor}
             stroke="var(--color-map-stroke)"
             strokeWidth={0.5}
-            className="outline-none focus:outline-none focus:ring-0"
+            // Passing cursor and fill transitions to Tailwind CSS ensures the browser native 
+            // engine handles the hover/pointer, preventing the Javascript from ever getting stuck.
+            className={`outline-none focus:outline-none focus:ring-0 transition-colors duration-200 ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
             onMouseEnter={(e) => {
-              if (continent === 'Other') return;
+              if (!isClickable) return;
               if (selectedContinent) {
                 setHoveredCountry(numericId);
                 setTooltip({ show: true, content: countryName, x: e.clientX, y: e.clientY });
@@ -63,14 +67,13 @@ export default function MapPolygons({ mapData }: MapPolygonsProps) {
               setTooltip({ ...tooltip, show: false });
             }}
             onClick={(e: React.MouseEvent) => {
-              if (continent === 'Other') return;
+              if (!isClickable) return;
               
               if (selectedContinent) {
                 if (alpha2) router.push(`/country/${alpha2}`);
               } else {
                 const view = CONTINENT_VIEWS[continent as keyof typeof CONTINENT_VIEWS];
                 if (view) {
-                  // Instantly switch context to the country under the mouse to prevent gray flashing
                   handleContinentClick(continent, view);
                   setHoveredCountry(numericId); 
                   setTooltip({ show: true, content: countryName, x: e.clientX, y: e.clientY });
@@ -78,10 +81,9 @@ export default function MapPolygons({ mapData }: MapPolygonsProps) {
               }
             }}
             style={{
-              // Force CSS pointer cursor at all times if it's a clickable continent/country
-              default: { outline: "none", transition: "fill 0.2s ease", cursor: continent === 'Other' ? 'default' : 'pointer' },
-              hover: { outline: "none", transition: "fill 0.2s ease", cursor: continent === 'Other' ? 'default' : 'pointer' },
-              pressed: { outline: "none", cursor: continent === 'Other' ? 'default' : 'pointer' },
+              default: { outline: "none" },
+              hover: { outline: "none" },
+              pressed: { outline: "none" },
               // @ts-expect-error simple-maps typings miss focus but React DOM accepts it
               focus: { outline: "none" }
             }}
