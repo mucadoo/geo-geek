@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Open_Sans, Raleway } from "next/font/google";
+import { Space_Mono, Oswald } from "next/font/google";
 import "./globals.css";
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
+const oswald = Oswald({
+  variable: "--font-oswald",
   subsets: ["latin"],
 });
 
-const raleway = Raleway({
-  variable: "--font-raleway",
+const space = Space_Mono({
+  weight: ["400", "700"],
+  variable: "--font-space",
   subsets: ["latin"],
 });
 
@@ -23,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${openSans.variable} ${raleway.variable}`}>
+    <html lang="en" className={`${oswald.variable} ${space.variable}`}>
       <body className="antialiased min-h-screen">
         {children}
       </body>

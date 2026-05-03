@@ -19,10 +19,10 @@ export default async function CountryInfo({ params }: { params: { id: string } }
     notFound();
   }
 
-  const infoRows = [
+  const infoRows =[
     { label: 'Capital', value: country.capital },
     { label: 'Largest City', value: country.largest_city },
-    { label: 'Official languages', value: country.official_language },
+    { label: 'Languages', value: country.official_language },
     { label: 'Demonym', value: country.demonym },
     { label: 'Government', value: country.government },
     { label: 'Area', value: `${country.area_km2.toLocaleString()} km²` },
@@ -33,59 +33,60 @@ export default async function CountryInfo({ params }: { params: { id: string } }
     { label: 'Time Zone', value: country.time_zone },
     { label: 'Calling code', value: country.calling_code },
     { label: 'ISO Code', value: country.ISO_code },
-    { label: 'Internet TLD', value: country.internet_TLD },
   ];
 
   return (
-    <div className="container mx-auto">
+    <div className="container-custom">
       <Header />
-      <main className="animate-in fade-in duration-1000">
-        <header className="w-full h-[43px] flex items-center mb-8">
-          <Link href="/map" className="px-5 text-geogeek-green-light hover:text-geogeek-green transition-colors drop-shadow-[1px_1px_0_#555]">
-            <ArrowLeft size={25} />
+      <main className="animate-in fade-in duration-1000 mt-6 mb-12">
+        <header className="w-full flex items-center justify-between mb-10 card !py-4 !px-8">
+          <Link href="/map" className="btn-accent !px-4 !py-2 flex items-center justify-center">
+            <ArrowLeft size={20} />
           </Link>
-          <h2 className="title flex-grow pr-[50px] mb-0">{country.name}</h2>
+          <h2 className="title !mb-0 flex-grow">{country.name}</h2>
         </header>
 
         <div className="flex flex-wrap -mx-[10px]">
-          <section className="w-[300px] px-[10px]">
-            <h3 className="title text-[24px]">Summary</h3>
-            <article>
-              <p className="medium-text text-justify">
+          <section className="w-1/3 px-[10px]">
+            <div className="card h-full !p-6 flex flex-col">
+              <h3 className="font-oswald text-2xl font-bold uppercase tracking-wider text-[#1c2e36] mb-4 text-center">Summary</h3>
+              <p className="font-space text-gray-600 leading-relaxed text-justify text-[14px]">
                 {country.description}
               </p>
-            </article>
+            </div>
           </section>
 
-          <section className="w-[300px] px-[10px]">
-            <figure className="mb-[30px]">
-              <figcaption className="title text-[24px]">Flag</figcaption>
-              <div className="relative h-[200px] flex items-center justify-center">
+          <section className="w-1/3 px-[10px]">
+            <div className="card h-full !p-6 flex flex-col items-center">
+              <h3 className="font-oswald text-2xl font-bold uppercase tracking-wider text-[#1c2e36] mb-6">Flag</h3>
+              <div className="relative w-full flex items-center justify-center flex-grow">
                 <img 
                   src={country.flagUrl} 
                   alt={`${country.name} flag`}
-                  className="max-w-[275px] max-h-[200px] block mx-auto"
+                  className="max-w-full max-h-[160px] object-contain rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.1)] border border-gray-100"
                 />
               </div>
-            </figure>
+            </div>
           </section>
 
-          <section className="w-[300px] px-[10px]">
-            <h3 className="title text-[24px]">Info</h3>
-            <table className="w-full border-collapse">
-              <tbody>
-                {infoRows.map((row) => (
-                  <tr key={row.label} className="border-t border-black">
-                    <td className="font-raleway font-normal py-[5px] px-[7px] text-center text-[15px] rounded-[10px]">
-                      {row.label}
-                    </td>
-                    <td className="font-raleway font-light py-[5px] px-[7px] text-center text-[15px] rounded-[10px]">
-                      {row.value}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <section className="w-1/3 px-[10px]">
+            <div className="card h-full !p-6">
+              <h3 className="font-oswald text-2xl font-bold uppercase tracking-wider text-[#1c2e36] mb-4 text-center">Information</h3>
+              <table className="w-full text-left border-collapse rounded-xl overflow-hidden shadow-sm">
+                <tbody className="bg-white/50">
+                  {infoRows.map((row, i) => (
+                    <tr key={row.label} className={i % 2 === 0 ? "bg-white" : ""}>
+                      <td className="font-oswald font-bold py-2 px-3 text-[#1c2e36] text-[13px] uppercase tracking-wide border-b border-gray-100">
+                        {row.label}
+                      </td>
+                      <td className="font-space py-2 px-3 text-gray-600 text-[13px] border-b border-gray-100 text-right">
+                        {row.value}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
         </div>
       </main>

@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export function generateStaticParams() {
-  const rankingCategories = [
+  const rankingCategories =[
     'Most populous countries',
     'Less populous countries',
     'Larger countries',
@@ -26,39 +26,37 @@ export default async function RankingDetail({ params }: { params: { id: string }
   let valueLabel = 'Value';
   if (decodedId.includes('populous')) valueLabel = 'Population';
   if (decodedId.includes('Larger') || decodedId.includes('Smaller')) valueLabel = 'Area (km²)';
-  if (decodedId.includes('populated')) valueLabel = 'Population Density (per km²)';
+  if (decodedId.includes('populated')) valueLabel = 'Pop Density (/km²)';
 
   return (
-    <div className="container mx-auto">
+    <div className="container-custom">
       <Header />
-      <main className="animate-in fade-in duration-1000">
-        <header className="w-full h-[43px] flex items-center mb-10">
-          <Link href="/rankings" className="px-5 text-geogeek-green-light hover:text-geogeek-green transition-colors drop-shadow-[1px_1px_0_#555]">
-            <ArrowLeft size={25} />
+      <main className="animate-in fade-in duration-1000 mt-8 mb-12">
+        <header className="w-full flex items-center justify-between mb-10 card !py-4 !px-8">
+          <Link href="/rankings" className="btn-accent !px-4 !py-2 flex items-center justify-center">
+            <ArrowLeft size={20} />
           </Link>
-          <h2 className="title flex-grow pr-[50px] mb-0">{decodedId}</h2>
+          <h2 className="title !mb-0 flex-grow">{decodedId}</h2>
         </header>
 
-        <table className="mx-auto w-[500px] border-separate border-spacing-0 rounded-[10px] overflow-hidden">
+        <table className="mx-auto w-full max-w-[650px] border-collapse bg-white/80 rounded-[20px] shadow-xl overflow-hidden border border-white">
           <thead>
-            <tr className="font-raleway font-normal">
-              <th className="bg-geogeek-green-light text-white border border-[#DDD] p-[10px] text-[1.4em]">Position</th>
-              <th className="bg-geogeek-green-light text-white border border-[#DDD] p-[10px] text-[1.4em]">Country</th>
-              <th className="bg-geogeek-green-light text-white border border-[#DDD] p-[10px] text-[1.4em]">{valueLabel}</th>
+            <tr className="bg-primary text-white font-oswald tracking-widest text-lg uppercase">
+              <th className="p-4 text-center w-24">Pos</th>
+              <th className="p-4 text-left">Country</th>
+              <th className="p-4 text-right">{valueLabel}</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="font-space">
             {rankings.map((item, index) => (
-              <tr key={item.isoCode}>
-                <td className="bg-white border border-geogeek-green-light p-[10px] text-[1.2em] font-raleway font-normal text-center">
-                  {index + 1}
-                </td>
-                <td className="bg-white border border-geogeek-green-light p-[10px] text-[1.2em] font-raleway font-light text-center">
-                  <Link href={`/country/${item.isoCode}`} className="hover:text-geogeek-blue transition-colors">
+              <tr key={item.isoCode} className="border-b border-gray-100/50 last:border-0 hover:bg-white transition-colors">
+                <td className="p-4 text-center font-bold text-gray-400">#{index + 1}</td>
+                <td className="p-4 text-left">
+                  <Link href={`/country/${item.isoCode}`} className="text-[#1c2e36] hover:text-primary font-bold transition-colors">
                     {item.country}
                   </Link>
                 </td>
-                <td className="bg-white border border-geogeek-green-light p-[10px] text-[1.2em] font-raleway font-light text-center">
+                <td className="p-4 text-right text-gray-600">
                   {item.value ? item.value.toLocaleString() : 'N/A'}
                 </td>
               </tr>

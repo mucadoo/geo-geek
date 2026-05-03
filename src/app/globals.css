@@ -1,47 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F8F8F8;
-  --foreground: #171717;
-  --geogeek-green: #3b9a45;
-  --geogeek-green-light: #7cc284;
-  --geogeek-blue: #507eca;
-  --geogeek-blue-light: #6baced;
+  --background: #f0f4f5; /* Light dreamy gray-teal */
+  --foreground: #1c2e36;
+  --primary: #00a8b5;    /* Deep teal */
+  --accent: #fcd02c;     /* Hint yellow */
+  --danger: #ff5a5f;     /* Red highlight */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-geogeek-green: var(--geogeek-green);
-  --color-geogeek-green-light: var(--geogeek-green-light);
-  --color-geogeek-blue: var(--geogeek-blue);
-  --color-geogeek-blue-light: var(--geogeek-blue-light);
-  --font-open: var(--font-open-sans);
-  --font-raleway: var(--font-raleway);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --font-oswald: var(--font-oswald);
+  --font-space: var(--font-space);
 }
 
 body {
   background-color: var(--background);
-  background-image: url("/media/WorldMapGray.png") !important;
+  /* Dreamy dotted pattern background */
+  background-image: radial-gradient(#cbd5e1 2px, transparent 2px) !important;
+  background-size: 30px 30px !important;
   color: var(--foreground);
-  font-family: var(--font-open), Arial, Helvetica, sans-serif;
+  font-family: var(--font-space), monospace;
 }
 
-.container {
-  width: 960px;
+.container-custom {
+  width: 100%;
+  max-width: 1024px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 @layer components {
   .title {
-    @apply font-raleway font-normal leading-tight mb-[15px] text-center text-[36px];
+    @apply font-oswald text-5xl tracking-widest text-center text-[#1c2e36] mb-8 uppercase font-bold;
   }
 
-  .big-text {
-    @apply font-raleway font-light leading-tight text-[24px];
+  .btn-primary {
+    @apply bg-primary text-white px-8 py-3 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#008c98] transition-all shadow-md hover:shadow-lg active:scale-95;
   }
 
-  .medium-text {
-    @apply font-raleway font-light leading-tight text-[16px];
+  .btn-accent {
+    @apply bg-accent text-[#1c2e36] px-8 py-3 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#e5bc27] transition-all shadow-md hover:shadow-lg active:scale-95;
+  }
+
+  .card {
+    @apply bg-white/80 backdrop-blur-md rounded-[24px] shadow-xl border border-white/50 p-8;
   }
 }
