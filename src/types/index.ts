@@ -28,3 +28,8 @@ export type RankingType =
   | 'Less populated countries'
   | 'Highest HDI'
   | 'Lowest HDI';
+
+export interface RankingConfig {
+  title: RankingType;
+  slug: string;
+}

@@ -1,39 +1,32 @@
 import Header from '@/components/Header';
 import { countryService } from '@/lib/countryService';
-import { RankingType } from '@/types';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
+import { RANKING_CATEGORIES, getRankingBySlug } from '@/config/rankingsConfig';
+import { notFound } from 'next/navigation';
 
 export function generateStaticParams() {
-  const rankingCategories =[
-    'Most populous countries',
-    'Less populous countries',
-    'Larger countries',
-    'Smaller countries',
-    'Most populated countries',
-    'Less populated countries',
-    'Highest HDI',
-    'Lowest HDI',
-  ];
-  return rankingCategories.map((category) => ({
-    id: encodeURIComponent(category), // Encode so Next.js handles it properly in static export
+  return RANKING_CATEGORIES.map((category) => ({
+    slug: category.slug,
   }));
 }
 
-export default async function RankingDetail({ params }: { params: { id: string } }) {
-  const { id } = await params;
+export default async function RankingDetail({ params }: { params: { slug: string } }) {
+  const { slug } = await params;
+  const category = getRankingBySlug(slug);
+
+  if (!category) {
+    notFound();
+  }
   
-  // Safely decode in case of double encoding (e.g. Larger%2520countries -> Larger%20countries -> Larger countries)
-  const decodedId = decodeURIComponent(id).replace(/%20/g, ' ') as RankingType;
-  
-  const rankings = await countryService.getRankings(decodedId);
+  const rankings = await countryService.getRankings(category.title);
 
   let valueLabel = 'Value';
-  if (decodedId.includes('populous')) valueLabel = 'Population';
-  if (decodedId.includes('Larger') || decodedId.includes('Smaller')) valueLabel = 'Area (km²)';
-  if (decodedId.includes('populated')) valueLabel = 'Pop Density (/km²)';
-  if (decodedId.includes('HDI')) valueLabel = 'HDI Score';
+  if (category.title.includes('populous')) valueLabel = 'Population';
+  if (category.title.includes('Larger') || category.title.includes('Smaller')) valueLabel = 'Area (km²)';
+  if (category.title.includes('populated')) valueLabel = 'Pop Density (/km²)';
+  if (category.title.includes('HDI')) valueLabel = 'HDI Score';
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -44,10 +37,9 @@ export default async function RankingDetail({ params }: { params: { id: string }
           <Link href="/rankings" className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors p-2">
             <ArrowLeft size={24} strokeWidth={1.5} />
           </Link>
-          <h1 className="text-[32px] font-medium text-[#2c3e50] tracking-tight">{decodedId}</h1>
+          <h1 className="text-[32px] font-medium text-[#2c3e50] tracking-tight">{category.title}</h1>
         </div>
 
-        {/* Re-added the white background padding box here so it matches the beautiful UI */}
         <div className="max-w-[800px] mx-auto bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100">
           <Table>
             <TableHeader>
