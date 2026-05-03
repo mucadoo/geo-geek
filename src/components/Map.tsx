@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { ComposableMap, ZoomableGroup } from '@vnedyalk0v/react19-simple-maps';
 import { useMapStore } from '@/store/useMapStore';
 import { useWorldMapData } from '@/hooks/useWorldMapData';
@@ -66,7 +67,7 @@ export default function Map() {
               title="Return to World"
               className="absolute top-6 left-6 animate-in fade-in slide-in-from-left-4 duration-500 shadow-xl p-2 bg-white rounded-full hover:scale-105 transition-all group cursor-pointer"
             >
-              <img 
+              <Image 
                 src="/media/back_icon.svg" 
                 alt="Return to World" 
                 width={32} 

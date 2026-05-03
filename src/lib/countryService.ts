@@ -29,7 +29,7 @@ export const countryService = {
   getRankings: async (type: RankingType): Promise<{ country: string; value: string | number; isoCode: string }[]> => {
     const countries = await fetchCountries();
 
-    const parseValue = (val: any): number => {
+    const parseValue = (val: unknown): number => {
       if (typeof val === 'number') return val;
       if (typeof val === 'string') {
         const cleaned = val.replace(/,/g, '');
