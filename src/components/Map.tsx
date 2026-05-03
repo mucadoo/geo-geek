@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from '@vnedyalk0v/react19-simple-maps';
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
@@ -70,12 +70,12 @@ export default function Map() {
 
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ scale: 140, center:[0, 20] }}
+        projectionConfig={{ scale: 140, center: [0, 20] as any }}
         className="w-full h-full outline-none"
       >
         <ZoomableGroup
           zoom={position.zoom}
-          center={position.coordinates}
+          center={position.coordinates as any}
           onMoveEnd={(pos) => setPosition(pos)}
           className="transition-transform duration-1000 ease-in-out outline-none"
         >
@@ -89,7 +89,7 @@ export default function Map() {
               if (selectedContinent && continent !== selectedContinent) return null;
 
               const isHovered = selectedContinent
-                ? hoveredCountry === geo.rsmKey
+                ? hoveredCountry === (geo as any).rsmKey
                 : hoveredContinent === continent;
 
               let fillColor = "var(--color-map-fill)"; 
@@ -97,7 +97,7 @@ export default function Map() {
 
               return (
                 <Geography
-                  key={geo.rsmKey}
+                  key={(geo as any).rsmKey}
                   geography={geo}
                   fill={fillColor}
                   stroke="var(--color-map-stroke)"
@@ -105,7 +105,7 @@ export default function Map() {
                   onMouseEnter={(e) => {
                     if (continent === 'Other') return;
                     if (selectedContinent) {
-                      setHoveredCountry(geo.rsmKey);
+                      setHoveredCountry((geo as any).rsmKey);
                       setTooltip(prev => ({ ...prev, show: true, content: countryName, x: e.clientX, y: e.clientY }));
                     } else {
                       setHoveredContinent(continent);
