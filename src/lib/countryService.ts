@@ -28,45 +28,45 @@ export const countryService = {
 
   getRankings: async (type: RankingType): Promise<{ country: string; value: string | number; isoCode: string }[]> => {
     const countries = await fetchCountries();
-    let sorted = [...countries];
+
+    const parseValue = (val: any): number => {
+      if (typeof val === 'number') return val;
+      if (typeof val === 'string') {
+        const cleaned = val.replace(/,/g, '');
+        const parsed = parseFloat(cleaned);
+        return isNaN(parsed) ? -Infinity : parsed;
+      }
+      return -Infinity;
+    };
+
     let prop: keyof Country;
     let desc = true;
-    let filterEmpty = false;
 
     switch (type) {
       case 'Most populous countries': prop = 'population'; break;
-      case 'Less populous countries': prop = 'population'; desc = false; filterEmpty = true; break;
+      case 'Less populous countries': prop = 'population'; desc = false; break;
       case 'Larger countries': prop = 'area_km2'; break;
-      case 'Smaller countries': prop = 'area_km2'; desc = false; filterEmpty = true; break;
+      case 'Smaller countries': prop = 'area_km2'; desc = false; break;
       case 'Most populated countries': prop = 'density_km2'; break;
-      case 'Less populated countries': prop = 'density_km2'; desc = false; filterEmpty = true; break;
-      case 'Highest HDI': prop = 'HDI'; filterEmpty = true; break;
-      case 'Lowest HDI': prop = 'HDI'; desc = false; filterEmpty = true; break;
+      case 'Less populated countries': prop = 'density_km2'; desc = false; break;
+      case 'Highest HDI': prop = 'HDI'; break;
+      case 'Lowest HDI': prop = 'HDI'; desc = false; break;
     }
 
-    if (filterEmpty) {
-      if (prop === 'HDI') {
-        sorted = sorted.filter(c => c.HDI && c.HDI !== 'N/A' && !isNaN(parseFloat(c.HDI)));
-      } else {
-        sorted = sorted.filter(c => (c[prop] as number) > 0);
-      }
-    }
+    const sorted = [...countries].sort((a, b) => {
+      const valA = parseValue(a[prop]);
+      const valB = parseValue(b[prop]);
 
-    sorted.sort((a, b) => {
-      let valA = a[prop];
-      let valB = b[prop];
+      // Move invalid values (-Infinity) to the bottom
+      if (valA === -Infinity) return 1;
+      if (valB === -Infinity) return -1;
 
-      if (prop === 'HDI') {
-        valA = parseFloat(valA as string);
-        valB = parseFloat(valB as string);
-      }
-
-      return desc ? (valB as number) - (valA as number) : (valA as number) - (valB as number);
+      return desc ? valB - valA : valA - valB;
     });
 
     return sorted.slice(0, 10).map(c => ({
       country: c.name,
-      value: prop === 'HDI' ? c[prop] as string : c[prop] as number,
+      value: c[prop] as string | number,
       isoCode: c.ISO_code
     }));
   }

@@ -22,7 +22,7 @@ export default function Map() {
   return (
     // Replaced -mt-10 with a nice white card container UI
     <div 
-      className="relative w-full h-[650px] overflow-hidden flex items-center justify-center bg-white rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100"
+      className="relative w-full h-[650px] flex items-center justify-center bg-white rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100"
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setTooltip({ ...tooltip, show: false })}
     >
@@ -44,9 +44,10 @@ export default function Map() {
 
           <ComposableMap
             projection="geoMercator"
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            projectionConfig={{ scale: 140, center: [0, 20] as any }}
+            width={800}
+            height={450}
             className="w-full h-full outline-none"
+            style={{ width: '100%', height: '100%' }}
           >
             <ZoomableGroup
               zoom={position.zoom}
