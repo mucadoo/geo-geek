@@ -12,6 +12,8 @@ export function generateStaticParams() {
     'Smaller countries',
     'Most populated countries',
     'Less populated countries',
+    'Highest HDI',
+    'Lowest HDI',
   ];
   return rankingCategories.map((category) => ({
     id: encodeURIComponent(category),
@@ -27,42 +29,48 @@ export default async function RankingDetail({ params }: { params: { id: string }
   if (decodedId.includes('populous')) valueLabel = 'Population';
   if (decodedId.includes('Larger') || decodedId.includes('Smaller')) valueLabel = 'Area (km²)';
   if (decodedId.includes('populated')) valueLabel = 'Pop Density (/km²)';
+  if (decodedId.includes('HDI')) valueLabel = 'HDI Score';
 
   return (
-    <div className="container-custom">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="animate-in fade-in duration-1000 mt-8 mb-12">
-        <header className="w-full flex items-center justify-between mb-10 card !py-4 !px-8">
-          <Link href="/rankings" className="btn-accent !px-4 !py-2 flex items-center justify-center">
-            <ArrowLeft size={20} />
+      <main className="container-custom flex-grow animate-in fade-in duration-1000 mt-10 mb-20">
+        
+        <div className="relative w-full max-w-[800px] mx-auto text-center mb-12">
+          <Link href="/rankings" className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors p-2">
+            <ArrowLeft size={24} strokeWidth={1.5} />
           </Link>
-          <h2 className="title !mb-0 flex-grow">{decodedId}</h2>
-        </header>
+          <h1 className="text-[32px] font-medium text-[#2c3e50] tracking-tight">{decodedId}</h1>
+        </div>
 
-        <table className="mx-auto w-full max-w-[650px] border-collapse bg-white/80 rounded-[20px] shadow-xl overflow-hidden border border-white">
-          <thead>
-            <tr className="bg-primary text-white font-oswald tracking-widest text-lg uppercase">
-              <th className="p-4 text-center w-24">Pos</th>
-              <th className="p-4 text-left">Country</th>
-              <th className="p-4 text-right">{valueLabel}</th>
-            </tr>
-          </thead>
-          <tbody className="font-space">
-            {rankings.map((item, index) => (
-              <tr key={item.isoCode} className="border-b border-gray-100/50 last:border-0 hover:bg-white transition-colors">
-                <td className="p-4 text-center font-bold text-gray-400">#{index + 1}</td>
-                <td className="p-4 text-left">
-                  <Link href={`/country/${item.isoCode}`} className="text-[#1c2e36] hover:text-primary font-bold transition-colors">
-                    {item.country}
-                  </Link>
-                </td>
-                <td className="p-4 text-right text-gray-600">
-                  {item.value ? item.value.toLocaleString() : 'N/A'}
-                </td>
+        <div className="max-w-[800px] mx-auto bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b-2 border-gray-100">
+                <th className="pb-4 pt-2 font-bold text-[12px] text-gray-400 uppercase tracking-widest text-center w-20">Rank</th>
+                <th className="pb-4 pt-2 font-bold text-[12px] text-gray-400 uppercase tracking-widest pl-4">Country</th>
+                <th className="pb-4 pt-2 font-bold text-[12px] text-gray-400 uppercase tracking-widest text-right">{valueLabel}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rankings.map((item, index) => (
+                <tr key={item.isoCode} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors">
+                  <td className="py-5 text-center font-semibold text-[15px] text-gray-400">
+                    {index + 1}
+                  </td>
+                  <td className="py-5 pl-4">
+                    <Link href={`/country/${item.isoCode}`} className="font-medium text-[#2c3e50] hover:text-primary transition-colors text-[16px]">
+                      {item.country}
+                    </Link>
+                  </td>
+                  <td className="py-5 text-right font-light text-gray-500 text-[15px]">
+                    {item.value ? item.value.toLocaleString() : 'N/A'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </div>
   );

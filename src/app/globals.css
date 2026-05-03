@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f0f4f5; /* Light dreamy gray-teal */
-  --foreground: #1c2e36;
-  --primary: #00a8b5;    /* Deep teal */
-  --accent: #fcd02c;     /* Hint yellow */
-  --danger: #ff5a5f;     /* Red highlight */
+  --background: #f1f5f3; 
+  --foreground: #2c3e50;
+  --primary: #00a8b5;    
+  --accent: #ffcd42;     
+  --danger: #ff5a5f;     
+  --map-fill: #dbe5df;
+  --map-stroke: #ffffff;
 }
 
 @theme inline {
@@ -14,40 +16,35 @@
   --color-primary: var(--primary);
   --color-accent: var(--accent);
   --color-danger: var(--danger);
-  --font-oswald: var(--font-oswald);
-  --font-space: var(--font-space);
+  --color-map-fill: var(--map-fill);
+  --font-inter: var(--font-inter);
 }
 
 body {
   background-color: var(--background);
-  /* Dreamy dotted pattern background */
-  background-image: radial-gradient(#cbd5e1 2px, transparent 2px) !important;
-  background-size: 30px 30px !important;
+  /* Sleek dotted pattern */
+  background-image: radial-gradient(#d3dbd6 1.5px, transparent 1.5px) !important;
+  background-size: 20px 20px !important;
   color: var(--foreground);
-  font-family: var(--font-space), monospace;
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
 }
 
 .container-custom {
   width: 100%;
-  max-width: 1024px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 @layer components {
-  .title {
-    @apply font-oswald text-5xl tracking-widest text-center text-[#1c2e36] mb-8 uppercase font-bold;
-  }
-
   .btn-primary {
-    @apply bg-primary text-white px-8 py-3 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#008c98] transition-all shadow-md hover:shadow-lg active:scale-95;
+    @apply bg-primary text-white px-8 py-3 rounded-full font-medium tracking-wide text-sm hover:bg-[#008c98] transition-all shadow-md hover:shadow-lg active:scale-95;
   }
-
   .btn-accent {
-    @apply bg-accent text-[#1c2e36] px-8 py-3 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#e5bc27] transition-all shadow-md hover:shadow-lg active:scale-95;
+    @apply bg-accent text-[#2c3e50] px-8 py-3 rounded-full font-medium tracking-wide text-sm hover:bg-[#e6b83b] transition-all shadow-md hover:shadow-lg active:scale-95;
   }
-
-  .card {
-    @apply bg-white/80 backdrop-blur-md rounded-[24px] shadow-xl border border-white/50 p-8;
+  .pill-input {
+    @apply w-full bg-white border border-gray-200 rounded-full h-[50px] px-6 transition-all duration-300 text-[15px] outline-none text-gray-700 shadow-sm focus:border-primary focus:ring-4 focus:ring-primary/10 hover:border-gray-300;
   }
 }

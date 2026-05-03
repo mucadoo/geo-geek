@@ -22,19 +22,19 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="h-[80px] my-6 flex justify-between items-center card !py-0 !px-8">
-      <Link href="/" className="flex-shrink-0 hover:scale-105 transition-transform duration-300">
+    <header className="h-[90px] flex justify-between items-center px-4 w-full max-w-[1400px] mx-auto">
+      <Link href="/" className="hover:opacity-80 transition-opacity">
         <Image 
           src="/media/logo.png" 
           alt="Geogeek logo" 
-          width={150} 
-          height={45}
+          width={140} 
+          height={40}
           className="object-contain"
           priority
         />
       </Link>
-      <nav className="h-full flex items-center">
-        <ul className="flex gap-2">
+      <nav>
+        <ul className="flex items-center gap-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
@@ -44,13 +44,13 @@ export default function Header() {
                 <Link 
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-[6px] px-5 py-2.5 rounded-full font-oswald font-bold tracking-widest text-[13px] transition-all duration-300",
+                    "flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[13px] tracking-widest uppercase transition-all duration-300",
                     isActive 
-                      ? "bg-primary text-white shadow-[0_4px_10px_rgba(0,168,181,0.3)]" 
-                      : "text-gray-500 hover:text-primary hover:bg-primary/10"
+                      ? "bg-white text-[#2c3e50] shadow-sm border border-gray-100" 
+                      : "text-gray-500 hover:text-primary hover:bg-white/50"
                   )}
                 >
-                  <Icon size={16} className={isActive ? "text-white" : "text-gray-400"} />
+                  <Icon size={15} className={isActive ? "text-primary" : "text-gray-400"} />
                   {item.label}
                 </Link>
               </li>

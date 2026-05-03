@@ -6,31 +6,27 @@ const rankingCategories =[
   'Less populous countries',
   'Larger countries',
   'Smaller countries',
-  'Most populated countries',
-  'Less populated countries',
+  'Highest HDI',
+  'Lowest HDI',
 ];
 
 export default function Rankings() {
   return (
-    <div className="container-custom">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="animate-in fade-in duration-1000 mt-8 mb-16">
-        <h1 className="title">Global Rankings</h1>
-        <div className="flex flex-wrap -mx-3 mt-10">
+      <main className="container-custom flex-grow animate-in fade-in duration-1000 mt-10 mb-20">
+        <h1 className="text-[36px] font-medium text-center text-[#2c3e50] tracking-tight mb-16">Global Rankings</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1000px] mx-auto">
           {rankingCategories.map((category) => (
-            <div key={category} className="w-1/3 px-3 mb-6">
-              <Link 
-                href={`/rankings/${encodeURIComponent(category)}`}
-                className="card flex flex-col justify-center h-[200px] text-center border-b-4 border-b-transparent hover:border-b-primary hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
-              >
-                <p className="font-oswald text-2xl font-bold uppercase tracking-wider text-[#1c2e36] group-hover:text-primary transition-colors">
-                  {category}
-                </p>
-                <span className="inline-block mt-4 text-gray-400 font-space text-sm group-hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
-                  View List →
-                </span>
-              </Link>
-            </div>
+            <Link 
+              key={category}
+              href={`/rankings/${encodeURIComponent(category)}`}
+              className="bg-white rounded-2xl h-[140px] flex items-center justify-center text-center px-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:shadow-[0_8px_30px_rgba(0,168,181,0.1)] hover:border-primary/20 transition-all duration-300 group"
+            >
+              <h3 className="font-medium text-[16px] text-gray-700 group-hover:text-primary transition-colors">
+                {category}
+              </h3>
+            </Link>
           ))}
         </div>
       </main>

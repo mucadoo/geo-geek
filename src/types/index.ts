@@ -25,4 +25,6 @@ export type RankingType =
   | 'Larger countries'
   | 'Smaller countries'
   | 'Most populated countries'
-  | 'Less populated countries';
+  | 'Less populated countries'
+  | 'Highest HDI'
+  | 'Lowest HDI';

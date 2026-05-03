@@ -4,12 +4,7 @@ import Header from '@/components/Header';
 import { useState } from 'react';
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({ name: false, email: false, message: false });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -28,56 +23,51 @@ export default function Contact() {
     const newErrors = { name: formData.name === '', email: formData.email === '', message: formData.message === '' };
     setErrors(newErrors);
 
-    if (Object.values(newErrors).some((v) => v)) {
-      alert('Please fill out all fields.');
-      return;
-    }
-
+    if (Object.values(newErrors).some((v) => v)) return;
     alert('Message sent successfully!');
     setFormData({ name: '', email: '', message: '' });
   };
 
-  const inputClasses = (hasError: boolean) => `
-    w-full bg-white/50 backdrop-blur-sm border-2 rounded-xl h-[48px] px-4
-    transition-all duration-300 font-space text-[14px] outline-none text-gray-700
-    ${hasError 
-      ? 'border-danger focus:ring-4 focus:ring-danger/20 bg-red-50/50' 
-      : 'border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 hover:border-gray-300'}
-  `;
-
   return (
-    <div className="container-custom">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="animate-in fade-in duration-1000 mt-10">
-        <h2 className="title">Contact us</h2>
-        <section className="mx-auto max-w-[540px] card">
-          <form onSubmit={handleSubmit} noValidate>
-            <div className="mb-6">
-              <label htmlFor="contact_name" className="block text-[#1c2e36] text-[15px] font-bold font-oswald uppercase tracking-wider mb-2">
-                Name:
-              </label>
-              <input type="text" id="contact_name" name="name" placeholder="John Doe" className={inputClasses(errors.name)} value={formData.name} onChange={handleChange} onBlur={handleBlur} />
-            </div>
+      <main className="container-custom flex-grow animate-in fade-in duration-1000 mt-10 flex flex-col items-center">
+        <h1 className="text-[36px] font-medium text-[#2c3e50] tracking-tight mb-12">Get in touch</h1>
+        
+        <form onSubmit={handleSubmit} noValidate className="w-full max-w-[500px] bg-white p-10 rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100">
+          <div className="mb-6">
+            <input 
+              type="text" 
+              name="name" 
+              placeholder="Your Name" 
+              className={`pill-input ${errors.name ? '!border-danger bg-red-50/30' : ''}`} 
+              value={formData.name} onChange={handleChange} onBlur={handleBlur} 
+            />
+          </div>
 
-            <div className="mb-6">
-              <label htmlFor="contact_email" className="block text-[#1c2e36] text-[15px] font-bold font-oswald uppercase tracking-wider mb-2">
-                Email:
-              </label>
-              <input type="email" id="contact_email" name="email" placeholder="john@example.com" className={inputClasses(errors.email)} value={formData.email} onChange={handleChange} onBlur={handleBlur} />
-            </div>
+          <div className="mb-6">
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Your Email" 
+              className={`pill-input ${errors.email ? '!border-danger bg-red-50/30' : ''}`} 
+              value={formData.email} onChange={handleChange} onBlur={handleBlur} 
+            />
+          </div>
 
-            <div className="mb-8">
-              <label htmlFor="contact_message" className="block text-[#1c2e36] text-[15px] font-bold font-oswald uppercase tracking-wider mb-2">
-                Message:
-              </label>
-              <textarea id="contact_message" name="message" placeholder="How can we help?" className={`${inputClasses(errors.message)} h-auto min-h-[140px] py-4 leading-relaxed`} value={formData.message} onChange={handleChange} onBlur={handleBlur} />
-            </div>
+          <div className="mb-8">
+            <textarea 
+              name="message" 
+              placeholder="Your Message" 
+              className={`pill-input h-auto min-h-[140px] py-4 rounded-[25px] resize-none ${errors.message ? '!border-danger bg-red-50/30' : ''}`} 
+              value={formData.message} onChange={handleChange} onBlur={handleBlur} 
+            />
+          </div>
 
-            <div className="text-center">
-              <button type="submit" className="btn-primary w-full shadow-lg">Send Message</button>
-            </div>
-          </form>
-        </section>
+          <button type="submit" className="btn-primary w-full h-[50px] text-[15px]">
+            SEND MESSAGE
+          </button>
+        </form>
       </main>
     </div>
   );

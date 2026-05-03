@@ -36,51 +36,60 @@ export default async function CountryInfo({ params }: { params: { id: string } }
   ];
 
   return (
-    <div className="container-custom">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="animate-in fade-in duration-1000 mt-6 mb-12">
-        <header className="w-full flex items-center justify-between mb-10 card !py-4 !px-8">
-          <Link href="/map" className="btn-accent !px-4 !py-2 flex items-center justify-center">
-            <ArrowLeft size={20} />
+      <main className="container-custom flex-grow animate-in fade-in duration-1000 mt-4 mb-20 relative z-10">
+        
+        {/* Title & Back Button */}
+        <div className="relative w-full text-center mb-16">
+          <Link href="/map" className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors p-2">
+            <ArrowLeft size={24} strokeWidth={1.5} />
           </Link>
-          <h2 className="title !mb-0 flex-grow">{country.name}</h2>
-        </header>
+          <h1 className="text-[36px] font-medium text-[#2c3e50] tracking-tight">{country.name}</h1>
+        </div>
 
-        <div className="flex flex-wrap -mx-[10px]">
-          <section className="w-1/3 px-[10px]">
-            <div className="card h-full !p-6 flex flex-col">
-              <h3 className="font-oswald text-2xl font-bold uppercase tracking-wider text-[#1c2e36] mb-4 text-center">Summary</h3>
-              <p className="font-space text-gray-600 leading-relaxed text-justify text-[14px]">
-                {country.description}
-              </p>
+        {/* 3-Column Layout perfectly matching the Congo screenshot */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 px-4">
+          
+          {/* Column 1: Summary */}
+          <section className="flex flex-col">
+            <h2 className="text-center font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-8">
+              Summary
+            </h2>
+            <p className="text-justify text-[14px] leading-[1.8] text-gray-600 font-light">
+              {country.description}
+            </p>
+          </section>
+
+          {/* Column 2: Flag */}
+          <section className="flex flex-col items-center">
+            <h2 className="text-center font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-8">
+              Flag
+            </h2>
+            <div className="flex-grow flex items-start justify-center pt-4">
+              <img 
+                src={country.flagUrl} 
+                alt={`${country.name} flag`}
+                className="max-w-[280px] w-full object-contain rounded-[8px] shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+              />
             </div>
           </section>
 
-          <section className="w-1/3 px-[10px]">
-            <div className="card h-full !p-6 flex flex-col items-center">
-              <h3 className="font-oswald text-2xl font-bold uppercase tracking-wider text-[#1c2e36] mb-6">Flag</h3>
-              <div className="relative w-full flex items-center justify-center flex-grow">
-                <img 
-                  src={country.flagUrl} 
-                  alt={`${country.name} flag`}
-                  className="max-w-full max-h-[160px] object-contain rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.1)] border border-gray-100"
-                />
-              </div>
-            </div>
-          </section>
-
-          <section className="w-1/3 px-[10px]">
-            <div className="card h-full !p-6">
-              <h3 className="font-oswald text-2xl font-bold uppercase tracking-wider text-[#1c2e36] mb-4 text-center">Information</h3>
-              <table className="w-full text-left border-collapse rounded-xl overflow-hidden shadow-sm">
-                <tbody className="bg-white/50">
+          {/* Column 3: Information Table */}
+          <section className="flex flex-col">
+            <h2 className="text-center font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-8">
+              Information
+            </h2>
+            <div className="w-full bg-white/40 rounded-xl p-6 shadow-sm border border-white">
+              <table className="w-full text-left border-collapse">
+                <tbody>
                   {infoRows.map((row, i) => (
-                    <tr key={row.label} className={i % 2 === 0 ? "bg-white" : ""}>
-                      <td className="font-oswald font-bold py-2 px-3 text-[#1c2e36] text-[13px] uppercase tracking-wide border-b border-gray-100">
+                    <tr key={row.label} className="border-b border-gray-200/60 last:border-0">
+                      <td className="py-3 font-semibold text-[11px] text-[#2c3e50] uppercase tracking-widest whitespace-nowrap">
                         {row.label}
                       </td>
-                      <td className="font-space py-2 px-3 text-gray-600 text-[13px] border-b border-gray-100 text-right">
-                        {row.value}
+                      <td className="py-3 text-[13px] text-gray-500 font-light text-right pl-4">
+                        {row.value || 'N/A'}
                       </td>
                     </tr>
                   ))}
@@ -88,6 +97,7 @@ export default async function CountryInfo({ params }: { params: { id: string } }
               </table>
             </div>
           </section>
+
         </div>
       </main>
     </div>

@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
-import { Space_Mono, Oswald } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const oswald = Oswald({
-  variable: "--font-oswald",
-  subsets: ["latin"],
-});
-
-const space = Space_Mono({
-  weight: ["400", "700"],
-  variable: "--font-space",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -24,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${oswald.variable} ${space.variable}`}>
+    <html lang="en" className={`${inter.variable}`}>
       <body className="antialiased min-h-screen">
         {children}
       </body>

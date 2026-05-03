@@ -23,19 +23,19 @@ const NUMERIC_TO_ALPHA2: Record<string, string> = {
 const CONTINENT_VIEWS = {
   'Africa': { center: [20, 0] as[number, number], zoom: 2.2 },
   'Asia': { center:[90, 30] as [number, number], zoom: 1.8 },
-  'Europe': { center:[15, 50] as [number, number], zoom: 3.2 },
-  'North America': { center: [-95, 45] as [number, number], zoom: 1.8 },
+  'Europe': { center:[15, 50] as[number, number], zoom: 3.2 },
+  'North America': { center:[-95, 45] as [number, number], zoom: 1.8 },
   'South America': { center: [-60, -20] as [number, number], zoom: 2.0 },
   'Oceania': { center:[140, -25] as [number, number], zoom: 2.5 },
 };
 
 export default function Map() {
   const router = useRouter();
-  const [position, setPosition] = useState({ coordinates:[0, 20] as [number, number], zoom: 1 });
+  const[position, setPosition] = useState({ coordinates:[0, 20] as [number, number], zoom: 1 });
   const [selectedContinent, setSelectedContinent] = useState<string | null>(null);
   const [hoveredContinent, setHoveredContinent] = useState<string | null>(null);
-  const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
-  const [tooltip, setTooltip] = useState({ show: false, content: '', x: 0, y: 0 });
+  const[hoveredCountry, setHoveredCountry] = useState<string | null>(null);
+  const[tooltip, setTooltip] = useState({ show: false, content: '', x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
     setTooltip(prev => ({ ...prev, x: e.clientX, y: e.clientY }));
@@ -45,8 +45,8 @@ export default function Map() {
     const view = CONTINENT_VIEWS[name as keyof typeof CONTINENT_VIEWS];
     if (view) {
       setSelectedContinent(name);
-      setPosition({ coordinates: view.center, zoom: view.zoom });
-      setTooltip(prev => ({ ...prev, show: false })); // Hide tooltip on zoom
+      setPosition(view);
+      setTooltip(prev => ({ ...prev, show: false }));
     }
   };
 
@@ -57,22 +57,21 @@ export default function Map() {
 
   return (
     <div 
-      className="relative w-full max-w-[940px] mx-auto h-[550px] card !p-2 overflow-hidden flex items-center justify-center group"
+      className="relative w-full h-[650px] overflow-hidden flex items-center justify-center -mt-10"
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setTooltip(prev => ({ ...prev, show: false }))}
     >
-      {/* Dynamic Floating Tooltip */}
       <div
-        className="fixed z-50 px-4 py-2 bg-white text-[#1c2e36] font-oswald font-bold tracking-widest text-lg rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-full shadow-[0_8px_16px_rgba(0,0,0,0.15)] border-2 border-primary transition-opacity duration-150"
-        style={{ left: tooltip.x, top: tooltip.y - 20, opacity: tooltip.show ? 1 : 0 }}
+        className="fixed z-50 px-5 py-2.5 bg-white text-gray-800 font-semibold text-sm rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-[120%] shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-opacity duration-150 border border-gray-100 whitespace-nowrap"
+        style={{ left: tooltip.x, top: tooltip.y, opacity: tooltip.show ? 1 : 0 }}
       >
         {tooltip.content}
       </div>
 
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ scale: 130, center:[0, 20] }}
-        className="w-full h-full outline-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.05)]"
+        projectionConfig={{ scale: 140, center:[0, 20] }}
+        className="w-full h-full outline-none"
       >
         <ZoomableGroup
           zoom={position.zoom}
@@ -87,25 +86,22 @@ export default function Map() {
               const alpha2 = NUMERIC_TO_ALPHA2[numericId];
               const countryName = geo.properties?.name || "Unknown";
 
-              // Instantly hide continents that aren't selected
               if (selectedContinent && continent !== selectedContinent) return null;
 
               const isHovered = selectedContinent
                 ? hoveredCountry === geo.rsmKey
                 : hoveredContinent === continent;
 
-              // Color Theme
-              let fillColor = "#cbd5e1"; // Base Zoom-out state 
-              if (isHovered && continent !== 'Other') fillColor = "var(--danger)";
-              else if (selectedContinent) fillColor = "#e2e8f0"; // Base Zoom-in state
+              let fillColor = "var(--color-map-fill)"; 
+              if (isHovered && continent !== 'Other') fillColor = "var(--color-danger)";
 
               return (
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
                   fill={fillColor}
-                  stroke="#ffffff"
-                  strokeWidth={selectedContinent ? 0.3 : 0.6}
+                  stroke="var(--color-map-stroke)"
+                  strokeWidth={0.5}
                   onMouseEnter={(e) => {
                     if (continent === 'Other') return;
                     if (selectedContinent) {
@@ -130,8 +126,8 @@ export default function Map() {
                     }
                   }}
                   style={{
-                    default: { outline: "none", transition: "fill 0.3s ease" },
-                    hover: { outline: "none", transition: "fill 0.3s ease", cursor: continent === 'Other' ? 'default' : 'pointer' },
+                    default: { outline: "none", transition: "fill 0.2s ease" },
+                    hover: { outline: "none", transition: "fill 0.2s ease", cursor: continent === 'Other' ? 'default' : 'pointer' },
                     pressed: { outline: "none" }
                   }}
                 />
@@ -144,7 +140,7 @@ export default function Map() {
       {selectedContinent && (
         <button
           onClick={handleReset}
-          className="absolute bottom-6 left-1/2 transform -translate-x-1/2 btn-accent flex items-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500"
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 btn-accent flex items-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-xl"
         >
           ← Return to World
         </button>
