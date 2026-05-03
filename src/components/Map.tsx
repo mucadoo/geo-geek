@@ -21,12 +21,12 @@ const NUMERIC_TO_ALPHA2: Record<string, string> = {
 };
 
 const CONTINENT_VIEWS = {
-  'Africa': { center: [20, 0] as[number, number], zoom: 2.2 },
-  'Asia': { center:[90, 30] as [number, number], zoom: 1.8 },
-  'Europe': { center:[15, 50] as[number, number], zoom: 3.2 },
-  'North America': { center:[-95, 45] as [number, number], zoom: 1.8 },
-  'South America': { center: [-60, -20] as [number, number], zoom: 2.0 },
-  'Oceania': { center:[140, -25] as [number, number], zoom: 2.5 },
+  'Africa': { coordinates: [20, 0] as [number, number], zoom: 2.2 },
+  'Asia': { coordinates: [90, 30] as [number, number], zoom: 1.8 },
+  'Europe': { coordinates: [15, 50] as [number, number], zoom: 3.2 },
+  'North America': { coordinates: [-95, 45] as [number, number], zoom: 1.8 },
+  'South America': { coordinates: [-60, -20] as [number, number], zoom: 2.0 },
+  'Oceania': { coordinates: [140, -25] as [number, number], zoom: 2.5 },
 };
 
 export default function Map() {
