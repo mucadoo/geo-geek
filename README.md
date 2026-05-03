@@ -1,37 +1,43 @@
 # GeoGeek
 
-GeoGeek is a modern, interactive geography explorer built with **Next.js 14+**, **TypeScript**, and **Tailwind CSS**. Originally a legacy jQuery-based project, it has been modernized to provide better performance, maintainability, and a seamless developer experience while preserving the original educational and interactive design.
+GeoGeek is a modern, interactive geography exploration platform built with **Next.js 14+**, **TypeScript**, and **Tailwind CSS**. Designed to make geography education engaging, GeoGeek offers an immersive experience for discovering political boundaries, geographical statistics, and unique country insights.
 
-## Features
-- **Interactive Map:** Drill-down explorer from continents to world-level details using **AmCharts v5**.
-- **Country Explorer:** Detailed information and statistics for countries around the world.
-- **Geography Rankings:** Rankings based on population, area, and population density.
-- **Contact:** User feedback form.
+## Core Features
 
-## Modernization Highlights
-- **Framework:** Next.js 14+ (App Router).
-- **Styling:** Tailwind CSS v4 with custom design tokens.
-- **Data:** Dynamic data fetching from [country-info-scraper](https://mucadoo.github.io/country-info-scraper/countries.min.json).
-- **Deployment:** Fully automated static deployment to GitHub Pages.
+### 🌍 Interactive Explorer Map
+*   **Drill-down Navigation:** Seamlessly transition between global views and specific continents.
+*   **Interactive Tooltips:** Real-time data visualization and hover-based insights as you explore the world.
+*   **Intuitive UI:** Refined navigation with easy "Return to World" capabilities, featuring interactive hover states and modern design aesthetics.
 
-## Tech Stack
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [AmCharts v5](https://www.amcharts.com/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [GitHub Actions](https://github.com/features/actions)
+### 🗺️ Country Data Portal
+*   **Deep Dives:** Access comprehensive profiles for countries, including capital cities, official languages, demographic statistics, economic data (GDP, HDI), and more.
+*   **Polished Presentation:** Information is displayed in structured, clean layouts with high-quality imagery and typography for optimal readability.
 
-## Development
-To start the development server:
+### 📊 Geographical Rankings
+*   **Comparative Insights:** Explore world rankings based on population, land area, and other key geographic metrics to better understand the world political territory.
+
+## Technology Stack
+
+*   **Framework:** [Next.js 14+](https://nextjs.org/) (App Router).
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/) with a focus on custom, responsive design and accessibility.
+*   **Maps:** Leverages state-of-the-art interactive map libraries for smooth zooming and interaction.
+*   **Type Safety:** Fully typed with [TypeScript](https://www.typescriptlang.org/).
+*   **Performance:** Optimized for speed, featuring efficient client-side state management and static generation.
+
+## Getting Started
+
+To run the development server:
+
 ```bash
 npm install
 npm run dev
 ```
 
-To build for production:
-```bash
-npm run build
-```
+Open [http://localhost:3000](http://localhost:3000) to view the application in your browser.
 
 ## Deployment
-This project is automatically deployed to GitHub Pages upon pushing to the `main` branch.
+
+The project is configured for automated deployment via GitHub Actions, pushing the production-ready build to GitHub Pages. You can view the live application here: [GeoGeek on Vercel](https://geo-geek.vercel.app/)
+
+---
+*GeoGeek - Discovering the world, one territory at a time.*
