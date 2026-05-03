@@ -10,7 +10,11 @@
   },
   "overrides": {
     "react-simple-maps": {
-      "react": "$react"
+      "react": "^16.8.0 || 17.x || 18.x || 19.x",
+      "d3-geo": "^3.1.0",
+      "d3-color": "^3.1.0",
+      "d3-selection": "^3.0.0",
+      "d3-zoom": "^3.0.0"
     }
   },
   "dependencies": {
