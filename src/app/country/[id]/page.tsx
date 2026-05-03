@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import { countryService } from '@/lib/countryService';
 import { ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -67,9 +68,11 @@ export default async function CountryInfo({ params }: { params: { id: string } }
               Flag
             </h2>
             <div className="flex-grow flex items-start justify-center pt-4">
-              <img 
+              <Image 
                 src={country.flagUrl} 
                 alt={`${country.name} flag`}
+                width={280}
+                height={200}
                 className="max-w-[280px] w-full object-contain rounded-[8px] shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
               />
             </div>
@@ -83,7 +86,7 @@ export default async function CountryInfo({ params }: { params: { id: string } }
             <div className="w-full bg-white/40 rounded-xl p-6 shadow-sm border border-white">
               <table className="w-full text-left border-collapse">
                 <tbody>
-                  {infoRows.map((row, i) => (
+                  {infoRows.map((row) => (
                     <tr key={row.label} className="border-b border-gray-200/60 last:border-0">
                       <td className="py-3 font-semibold text-[11px] text-[#2c3e50] uppercase tracking-widest whitespace-nowrap">
                         {row.label}

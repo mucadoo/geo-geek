@@ -70,13 +70,13 @@ export default function Map() {
 
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ scale: 140, center: [0, 20] as any }}
+        projectionConfig={{ scale: 140, center: [0, 20] }}
         className="w-full h-full outline-none"
       >
         <ZoomableGroup
           zoom={position.zoom}
-          center={position.coordinates as any}
-          onMoveEnd={(pos) => setPosition(pos)}
+          center={position.coordinates}
+          onMoveEnd={(pos) => setPosition({ coordinates: pos.coordinates as [number, number], zoom: pos.zoom })}
           className="transition-transform duration-1000 ease-in-out outline-none"
         >
           <Geographies geography={GEO_URL}>
@@ -89,7 +89,7 @@ export default function Map() {
               if (selectedContinent && continent !== selectedContinent) return null;
 
               const isHovered = selectedContinent
-                ? hoveredCountry === (geo as any).rsmKey
+                ? hoveredCountry === geo.rsmKey
                 : hoveredContinent === continent;
 
               let fillColor = "var(--color-map-fill)"; 
@@ -97,7 +97,7 @@ export default function Map() {
 
               return (
                 <Geography
-                  key={(geo as any).rsmKey}
+                  key={geo.rsmKey}
                   geography={geo}
                   fill={fillColor}
                   stroke="var(--color-map-stroke)"
@@ -105,7 +105,7 @@ export default function Map() {
                   onMouseEnter={(e) => {
                     if (continent === 'Other') return;
                     if (selectedContinent) {
-                      setHoveredCountry((geo as any).rsmKey);
+                      setHoveredCountry(geo.rsmKey);
                       setTooltip(prev => ({ ...prev, show: true, content: countryName, x: e.clientX, y: e.clientY }));
                     } else {
                       setHoveredContinent(continent);
