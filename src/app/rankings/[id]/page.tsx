@@ -3,6 +3,7 @@ import { countryService } from '@/lib/countryService';
 import { RankingType } from '@/types';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 
 export function generateStaticParams() {
   const rankingCategories =[
@@ -43,33 +44,33 @@ export default async function RankingDetail({ params }: { params: { id: string }
           <h1 className="text-[32px] font-medium text-[#2c3e50] tracking-tight">{decodedId}</h1>
         </div>
 
-        <div className="max-w-[800px] mx-auto bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b-2 border-gray-100">
-                <th className="pb-4 pt-2 font-bold text-[12px] text-gray-400 uppercase tracking-widest text-center w-20">Rank</th>
-                <th className="pb-4 pt-2 font-bold text-[12px] text-gray-400 uppercase tracking-widest pl-4">Country</th>
-                <th className="pb-4 pt-2 font-bold text-[12px] text-gray-400 uppercase tracking-widest text-right">{valueLabel}</th>
-              </tr>
-            </thead>
-            <tbody>
+        <div className="max-w-[800px] mx-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-center w-20">Rank</TableHead>
+                <TableHead>Country</TableHead>
+                <TableHead className="text-right">{valueLabel}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {rankings.map((item, index) => (
-                <tr key={item.isoCode} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors">
-                  <td className="py-5 text-center font-semibold text-[15px] text-gray-400">
+                <TableRow key={item.isoCode}>
+                  <TableCell className="text-center font-semibold text-gray-400">
                     {index + 1}
-                  </td>
-                  <td className="py-5 pl-4">
-                    <Link href={`/country/${item.isoCode}`} className="font-medium text-[#2c3e50] hover:text-primary transition-colors text-[16px]">
+                  </TableCell>
+                  <TableCell>
+                    <Link href={`/country/${item.isoCode}`} className="font-medium text-[#2c3e50] hover:text-primary transition-colors">
                       {item.country}
                     </Link>
-                  </td>
-                  <td className="py-5 text-right font-light text-gray-500 text-[15px]">
+                  </TableCell>
+                  <TableCell className="text-right font-light text-gray-500">
                     {item.value ? item.value.toLocaleString() : 'N/A'}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </main>
     </div>

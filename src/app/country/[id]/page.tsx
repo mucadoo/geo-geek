@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/Table';
 
 export async function generateStaticParams() {
   const countries = await countryService.getAllCountries();
@@ -83,22 +84,20 @@ export default async function CountryInfo({ params }: { params: { id: string } }
             <h2 className="text-center font-bold text-[15px] tracking-[0.2em] text-[#2c3e50] uppercase mb-8">
               Information
             </h2>
-            <div className="w-full bg-white/40 rounded-xl p-6 shadow-sm border border-white">
-              <table className="w-full text-left border-collapse">
-                <tbody>
-                  {infoRows.map((row) => (
-                    <tr key={row.label} className="border-b border-gray-200/60 last:border-0">
-                      <td className="py-3 font-semibold text-[11px] text-[#2c3e50] uppercase tracking-widest whitespace-nowrap">
-                        {row.label}
-                      </td>
-                      <td className="py-3 text-[13px] text-gray-500 font-light text-right pl-4">
-                        {row.value || 'N/A'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <Table>
+              <TableBody>
+                {infoRows.map((row) => (
+                  <TableRow key={row.label}>
+                    <TableCell className="py-3 font-semibold text-[11px] text-[#2c3e50] uppercase tracking-widest whitespace-nowrap">
+                      {row.label}
+                    </TableCell>
+                    <TableCell className="py-3 text-[13px] text-gray-500 font-light text-right pl-4">
+                      {row.value || 'N/A'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </section>
 
         </div>
