@@ -1,6 +1,6 @@
 # GeoGeek
 
-GeoGeek is a modern, interactive geography exploration platform built with **Next.js 14+**, **TypeScript**, and **Tailwind CSS**. Designed to make geography education engaging, GeoGeek offers an immersive experience for discovering political boundaries, geographical statistics, and unique country insights.
+GeoGeek is a modern, interactive geography exploration platform built with **Next.js**, **React**, **TypeScript**, and **Tailwind CSS**. Designed to make geography education engaging, GeoGeek offers an immersive experience for discovering political boundaries, geographical statistics, and unique country insights.
 
 ## Core Features
 
@@ -18,9 +18,12 @@ GeoGeek is a modern, interactive geography exploration platform built with **Nex
 
 ## Technology Stack
 
-*   **Framework:** [Next.js 14+](https://nextjs.org/) (App Router).
+*   **Framework:** [Next.js](https://nextjs.org/) (App Router).
+*   **Library:** [React](https://react.dev/).
 *   **Styling:** [Tailwind CSS](https://tailwindcss.com/) with a focus on custom, responsive design and accessibility.
-*   **Maps:** Leverages state-of-the-art interactive map libraries for smooth zooming and interaction.
+*   **Maps:** [react-simple-maps](https://www.react-simple-maps.com/) for interactive vector-based map visualizations.
+*   **State Management:** [Zustand](https://zustand.docs.pmndrs.org/).
+*   **Data Fetching:** [TanStack React Query](https://tanstack.com/query/latest).
 *   **Type Safety:** Fully typed with [TypeScript](https://www.typescriptlang.org/).
 *   **Performance:** Optimized for speed, featuring efficient client-side state management and static generation.
 
